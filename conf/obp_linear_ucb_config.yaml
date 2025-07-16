@@ -1,0 +1,4 @@
+open_bandits_adapter:
+  algorithm: linear_ucb
+  params:
+    random_state: 12345

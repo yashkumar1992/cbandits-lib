@@ -17,3 +17,4 @@ venv/
 .DS_Store
 Thumbs.db
 artifacts/vw_model/v1/models/vw_model-v1.joblib
+artifacts/

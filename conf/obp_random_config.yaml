@@ -1,0 +1,4 @@
+open_bandits_adapter:
+  algorithm: random
+  params:
+    random_state: 12345

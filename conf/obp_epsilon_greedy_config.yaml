@@ -1,0 +1,5 @@
+open_bandits_adapter:
+  algorithm: epsilon_greedy
+  params:
+    epsilon: 0.1
+    random_state: 12345
