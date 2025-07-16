@@ -3,7 +3,7 @@
 from typing import Any, Sequence, Tuple, Optional, Dict
 from vowpal_wabbit_next import Workspace, TextFormatReader, TextFormatParser
 from core.interfaces.cb_model import CBModel
-from registry.registry_fs import FSModelStore
+from registry.registry_fs_vw import FSModelStore
 
 def build_adf_string(
     context: Dict[str, Any],
@@ -27,7 +27,7 @@ class VWNextCBModel(CBModel):
         if not vw_args or ('--cb_adf' not in vw_args and '--cb_explore_adf' not in vw_args):
             raise ValueError("Must pass vw_args including --cb_adf or --cb_explore_adf")
         self._vw_args = vw_args
-        self.vw = Workspace(vw_args)
+        self.vw = Workspace(args=vw_args)
         self._parser = TextFormatParser(self.vw)
         self._last_actions = None
 
@@ -103,19 +103,25 @@ class VWNextCBModel(CBModel):
         artifact_subpath: str = "models"
     ) -> str:
         store = FSModelStore()
+        print(self._vw_args)
         
-        return store.save(name, self, version, registry_root, artifact_subpath)
+        return store.save(name, self.vw, version, registry_root, artifact_subpath)
 
     @classmethod
     def load(
-        cls,
+        self,
         name: str,
         version: str,
         registry_root: str,
-        artifact_subpath: str = "models"
+        artifact_subpath: str = "models",
+        vw_args: Optional[str] = None,
     ) -> 'VWNextCBModel':
         store = FSModelStore()
-        model = store.load(name, version, registry_root, artifact_subpath)
-        if not isinstance(model, cls):
-            raise TypeError(f"Expected {cls.__name__}, got {type(model)}")
-        return model
+        model_bytes = store.load(name, version, registry_root, artifact_subpath)
+        if vw_args:
+            self._vw_args = vw_args
+        # Rebuild adapter and attach workspace
+        print(self._vw_args)
+        self.vw = Workspace(model_data=model_bytes,args=self._vw_args)
+        self._parser = TextFormatParser(self.vw)
+        self._last_actions = None

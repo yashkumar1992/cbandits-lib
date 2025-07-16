@@ -28,10 +28,9 @@ class FSModelStore:
         filename = f"{name}-{version}.joblib"
         filepath = os.path.join(dirpath, filename)
         # Serialize VW internals to bytes
-        model_bytes = self.vw.serialize()  # :contentReference[oaicite:0]{index=0}
+        model_bytes = model.vw.serialize()  # :contentReference[oaicite:0]{index=0}
         #model_bytes = self.vw.serialize()
         save_obj = {
-            "vw_args": self._vw_args,
             "model_bytes": model_bytes,
         }
         #path = os.path.join(dirpath, f"{name}-{version}.joblib")
@@ -62,12 +61,13 @@ class FSModelStore:
         #model_bytes = joblib.load(filepath)
 
         save_obj = joblib.load(filepath)
-        vw_args = save_obj["vw_args"]
+        #vw_args = save_obj["vw_args"]
         model_bytes = save_obj["model_bytes"]
 
         # Rebuild adapter and attach workspace
-        model = cls(vw_args=vw_args)
-        model.vw = Workspace(model_data=model_bytes, args=vw_args)
+        model.vw = Workspace(model_data=model_bytes)
+        model._vw_args = ""
+        
         model._parser = TextFormatParser(model.vw)
         model._last_actions = None
         return model

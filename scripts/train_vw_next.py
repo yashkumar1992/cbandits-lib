@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # scripts/train_vw_next.py
 
+import os, sys
+#  ───────────────────────────────────────────────────────────────────────────
+#  Make sure the parent folder (code/bandit-lib) is on sys.path so that
+#  `import adapters.vw.vw_next_adapter` can resolve.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+#
+
 import argparse
 from adapters.vw.vw_next_adapter import VWNextCBModel
 
@@ -21,6 +28,25 @@ def main():
     # Save the trained model
     path = model.save(args.model_name, args.model_version, args.registry_root)
     print(f"Model saved at: {path}")
+
+    # 1) Load back via the adapter
+    model.load(
+        name=args.model_name,
+        version=args.model_version,
+        registry_root=args.registry_root)
+    print("🔄 Model reloaded from adapter.load(...)")
+
+    # 2) Build a single test example
+    test_context = {"feature1": 0.3, "feature2": 1.2}
+    test_actions = [
+        {"price": 2.99, "promo": 1},
+        {"price": 3.49, "promo": 0},
+        {"price": 1.99, "promo": 0},
+    ]
+
+    # 3) Run an ADF‐style predict
+    action_index, p_logged = model.predict((test_context, test_actions))
+    print(f" Chosen action: {action_index}   p_logged={p_logged:.4f}")
 
 
 if __name__ == '__main__':
