@@ -1,0 +1,7 @@
+numpy>=1.21
+vowpal-wabbit-next
+joblib
+open-bandits
+pyyaml
+argparse
+scikit-learn

@@ -1,0 +1,7 @@
+open_bandits_adapter:
+  algorithm: lin_ucb               # e.g., lin_ucb, neural_linear, etc.
+  params:
+    alpha: 1.0
+    lambda: 0.5
+    exploration_type: epsilon_greedy
+    epsilon: 0.1
