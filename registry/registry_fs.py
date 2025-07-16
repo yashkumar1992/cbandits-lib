@@ -1,6 +1,8 @@
 # registry_fs.py
 
 import os
+
+from vowpal_wabbit_next import TextFormatParser, Workspace
 import joblib
 from typing import Any
 
@@ -25,9 +27,19 @@ class FSModelStore:
         # Filename ends with .joblib
         filename = f"{name}-{version}.joblib"
         filepath = os.path.join(dirpath, filename)
+        # Serialize VW internals to bytes
+        model_bytes = self.vw.serialize()  # :contentReference[oaicite:0]{index=0}
+        #model_bytes = self.vw.serialize()
+        save_obj = {
+            "vw_args": self._vw_args,
+            "model_bytes": model_bytes,
+        }
+        #path = os.path.join(dirpath, f"{name}-{version}.joblib")
+        joblib.dump(save_obj, filepath)
+
 
         # Persist via joblib (handles numpy arrays, bytes, VW workspaces, etc.)
-        joblib.dump(model, filepath)
+        #joblib.dump(model_bytes, filepath)
 
         return filepath
 
@@ -46,5 +58,19 @@ class FSModelStore:
         filename = f"{name}-{version}.joblib"
         filepath = os.path.join(registry_root, name, version, artifact_subpath, filename)
 
-        # Load and return the model
-        return joblib.load(filepath)
+        # Read back the raw VW bytes
+        #model_bytes = joblib.load(filepath)
+
+        save_obj = joblib.load(filepath)
+        vw_args = save_obj["vw_args"]
+        model_bytes = save_obj["model_bytes"]
+
+        # Rebuild adapter and attach workspace
+        model = cls(vw_args=vw_args)
+        model.vw = Workspace(model_data=model_bytes, args=vw_args)
+        model._parser = TextFormatParser(model.vw)
+        model._last_actions = None
+        return model
+    
+    
+

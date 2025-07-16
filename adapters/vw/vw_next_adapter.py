@@ -103,6 +103,7 @@ class VWNextCBModel(CBModel):
         artifact_subpath: str = "models"
     ) -> str:
         store = FSModelStore()
+        
         return store.save(name, self, version, registry_root, artifact_subpath)
 
     @classmethod

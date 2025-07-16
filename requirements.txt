@@ -1,7 +1,7 @@
 numpy>=1.21
 vowpal-wabbit-next
 joblib
-open-bandits
+obp
 pyyaml
 argparse
 scikit-learn

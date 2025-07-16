@@ -1,7 +1,18 @@
 datasets/vw_bandit_dataset.dat
-core/action_spaces/__pycache__/adf_actions.cpython-311.pyc
-adapters/vw/__pycache__/vw_next_adapter.cpython-311.pyc
 artifacts/models/vw_model/v1/model.pkl
-core/interfaces/__pycache__/action.cpython-311.pyc
-core/interfaces/__pycache__/cb_model.cpython-311.pyc
-registry/__pycache__/registry_fs.cpython-311.pyc
+# Byte-code cache
+__pycache__/
+*.py[cod]
+
+# Virtual-envs
+.venv/
+.env/
+env/
+venv/
+
+# VS Code
+.vscode/
+
+# OS artifacts
+.DS_Store
+Thumbs.db

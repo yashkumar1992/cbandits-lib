@@ -22,5 +22,6 @@ def main():
     path = model.save(args.model_name, args.model_version, args.registry_root)
     print(f"Model saved at: {path}")
 
+
 if __name__ == '__main__':
     main()

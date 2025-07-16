@@ -8,7 +8,7 @@ def main():
     parser = argparse.ArgumentParser("Train and Demo Open Bandits Model")
     parser.add_argument(
         '--config', type=str,
-        default=os.path.join(os.path.dirname(__file__), '../config/config.yaml'),
+        default=os.path.join(os.path.dirname(__file__), './config/config.yaml'),
         help='Path to adapter config file'
     )
     parser.add_argument(
