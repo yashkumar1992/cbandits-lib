@@ -63,7 +63,7 @@ class VWNextCBModel(CBModel):
         self._last_actions = actions
         text = build_adf_string(context, actions)
         examples = [self._parser.parse_line(l) for l in text.strip().split('\n')]
-        result = self.vw.predict_one(examples, eval_mode=eval_mode)
+        result = self.vw.predict_one(examples)
         preds = result[0] if isinstance(result, tuple) else result
         idx, score = preds[0]
         return idx, float(score)
@@ -107,7 +107,6 @@ class VWNextCBModel(CBModel):
         
         return store.save(name, self.vw, version, registry_root, artifact_subpath)
 
-    @classmethod
     def load(
         self,
         name: str,

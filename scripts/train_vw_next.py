@@ -33,16 +33,19 @@ def main():
     model.load(
         name=args.model_name,
         version=args.model_version,
-        registry_root=args.registry_root)
+        registry_root=args.registry_root,
+        vw_args=["--cb_explore_adf","--epsilon=0.5"]  # or any other args you want to pass
+        )
     print("🔄 Model reloaded from adapter.load(...)")
 
-    # 2) Build a single test example
-    test_context = {"feature1": 0.3, "feature2": 1.2}
+    # Quick smoke‐test on your 4th ADF block (dayofweek=3)
+    test_context = {"dayofweek": 3}
     test_actions = [
-        {"price": 2.99, "promo": 1},
-        {"price": 3.49, "promo": 0},
-        {"price": 1.99, "promo": 0},
+        {"eventType": "views",     "timeWindow": 1440, "threshold": "Minimum: 10"},
+        {"eventType": "atc",       "timeWindow": 480,  "threshold": "10-20"},
+        {"eventType": "purchases", "timeWindow": 60,   "threshold": "20-30"},
     ]
+
 
     # 3) Run an ADF‐style predict
     action_index, p_logged = model.predict((test_context, test_actions))
