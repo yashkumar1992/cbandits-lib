@@ -1,5 +1,5 @@
 import numpy as np
-from adapters.scratch.neural_squarecb_model import NeuralSquareCB
+from adapters.scratch.neural_squarecb import NeuralSquareCB
 
 # --- Simulated Training Phase ---
 model = NeuralSquareCB(ctx_dim=2, act_dim=2, hidden_dims=[64, 32], gamma=100.0)
