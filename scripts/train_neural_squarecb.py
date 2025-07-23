@@ -2,7 +2,7 @@ import numpy as np
 from adapters.scratch.neural_squarecb import NeuralSquareCB
 
 # --- Simulated Training Phase ---
-model = NeuralSquareCB(ctx_dim=2, act_dim=2, hidden_dims=[64, 32], gamma=100.0)
+model = NeuralSquareCB(ctx_dim=2, act_dim=2, gamma=100.0)
 
 interactions = [
     (np.array([0.1, 0.2]), np.array([1.0, 0.5]), 1.0, 0.5),
@@ -16,7 +16,7 @@ for ctx, act, r, p in interactions:
 model.save(name="neural_squarecb")
 
 # --- Prediction Before Loading ---
-new_model = NeuralSquareCB(ctx_dim=2, act_dim=2, hidden_dims=[64, 32], gamma=100.0)
+new_model = NeuralSquareCB(ctx_dim=2, act_dim=2, gamma=100.0)
 test_context = np.array([0.2, 0.1])
 test_actions = [np.array([1.0, 0.5]), np.array([0.2, 0.8]), np.array([0.9, 0.7])]
 
