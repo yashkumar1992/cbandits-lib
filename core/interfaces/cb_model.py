@@ -27,9 +27,9 @@ class CBModel(Protocol):
 
     def predict(
         self,
-        row: Tuple[Any, Sequence[Any]],
-        eval_mode: bool = False
-    ) -> Tuple[Any, float]:
+        eval_mode: bool = False,
+        *kwargs: Any
+    ) -> Any:
         """
         Single-row inference.
 
@@ -38,18 +38,27 @@ class CBModel(Protocol):
         :returns: (chosen_action_id, score)
         """
 
+    def choose(
+        self,
+        *kwargs: Any
+    ) -> Any:
+        """
+        Single-row choose.
+        :returns: (chosen_action_id, score)
+        """
+
     def batch_predict(
         self,
-        rows: Sequence[Tuple[Any, Sequence[Any]]],
-        eval_mode: bool = False
-    ) -> Sequence[Tuple[Any, float]]:
+        eval_mode: bool = False,
+        *kwargs: Any
+    ) -> Any:
         """
         Batch inference over multiple rows.
         """
 
     def update(
         self,
-        interaction: Tuple[Any, Any, float, Optional[float]]
+        *kwargs: Any
     ) -> None:
         """
         Single-step online update.
@@ -59,8 +68,8 @@ class CBModel(Protocol):
 
     def batch_update(
         self,
-        interactions: Optional[Sequence[Tuple[Any, Any, float, Optional[float]]]],
-        data_file: Optional[str] = None
+        data_file: Optional[str] = None,
+        *kwargs: Any
     ) -> None:
         """
         Batch-style update over many interactions.

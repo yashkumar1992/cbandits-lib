@@ -99,3 +99,9 @@ Each script is a thin wrapper around the Typer CLI; feel free to delete them if 
 Inspired by Spotify’s **bandit-pylib**, Facebook ReAgent, and VW’s CB-ADF mode.
 
 Happy hacking 🚀
+
+
+setting up pearl
+git clone https://github.com/facebookresearch/Pearl.git
+cd Pearl
+pip install -e .
