@@ -5,3 +5,12 @@ obp
 pyyaml
 argparse
 scikit-learn
+
+tensorflow>=2.12.0
+tf-agents>=0.17.0
+gin-config
+cloudpickle
+
+
+tensorflow==2.15.0
+tensorflow-probability==0.23.0

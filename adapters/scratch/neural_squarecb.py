@@ -29,7 +29,9 @@ class NeuralSquareCB(CBModel):
             hidden_dims=self.hidden_dims,
             training_rounds=1,
             learning_rate=0.01,
-            action_representation_module=IdentityActionRepresentationModule(),
+            action_representation_module=IdentityActionRepresentationModule(
+                representation_dim=act_dim  # Action dimension
+            ),
             exploration_module=SquareCBExploration(gamma=self.gamma)
         )
         
@@ -79,19 +81,8 @@ class NeuralSquareCB(CBModel):
         context_tensor = torch.tensor(context, dtype=torch.float32)
         action_tensor = torch.tensor(action, dtype=torch.float32)
         
-        # Create Pearl action
-        pearl_action = Action(action_tensor)
-        
-        # Create action space with just this action for the update
-        action_space = ActionSpace([pearl_action])
-        
-        # Reset agent with current context and action space
-        self.agent.reset(context_tensor, action_space)
-        
-        # Agent selects action (should select the only available action)
-        selected_action = self.agent.act(exploit=False)
-        
-        # Create action result
+        # For contextual bandits, we don't need the full reset/act/observe cycle
+        # We can directly create an ActionResult and observe it
         action_result = ActionResult(
             observation=context_tensor,
             reward=reward,
@@ -100,7 +91,7 @@ class NeuralSquareCB(CBModel):
             info={}
         )
         
-        # Observe and learn
+        # Directly observe the result - Pearl contextual bandits don't require the full RL cycle
         self.agent.observe(action_result)
         self.agent.learn()
         
@@ -136,7 +127,9 @@ class NeuralSquareCB(CBModel):
             hidden_dims=self.hidden_dims,
             training_rounds=1,
             learning_rate=0.01,
-            action_representation_module=IdentityActionRepresentationModule(),
+            action_representation_module=IdentityActionRepresentationModule(
+                representation_dim=self.act_dim
+            ),
             exploration_module=SquareCBExploration(gamma=self.gamma)
         )
         
